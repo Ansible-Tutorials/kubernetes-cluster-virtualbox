@@ -19,13 +19,32 @@
         - net-tools
         - wget
         - curl
+        - bash-completion
 
     - name: Rename the systems
       shell:
          hostnamectl set-hostname k8smaster
 
     - name: Install Docker app
-      shell:
+      shell: 
         curl -fsSL https://get.docker.com | bash
       ignore_errors: true
+
+    - name: Make sure a Dopcker unit is running
+      systemd:
+        state: started
+        name: docker
+        enabled: yes
+
+    - name: Creating a file with content
+      copy:
+        dest: "/etc/modules-load.d/k8s.conf"
+        content: |
+          br_netfilter
+          ip_vs
+          ip_vs_rr
+          ip_vs_sh
+          ip_vs_wrr
+          nf_conntrack_ipv4
+      
 ...
