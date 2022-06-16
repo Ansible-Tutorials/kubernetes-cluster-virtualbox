@@ -1,0 +1,24 @@
+---
+- name: Install Kubernetes Cluster
+  hosts: local
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Upgrade all packages
+      yum:
+        name: "*"
+        state: latest
+    
+    - name: Install a list of packages with a list variable
+      yum:
+        name: "{{ packages }}"
+      vars:
+        packages:
+        - git
+        - vim
+        - net-tools
+
+    - name: Rename the systems
+      shell:
+         hostnamectl set-hostname k8smaster
+...
