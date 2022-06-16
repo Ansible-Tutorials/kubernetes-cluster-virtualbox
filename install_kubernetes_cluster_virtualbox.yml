@@ -1,6 +1,6 @@
 ---
 - name: Install Kubernetes Cluster
-  hosts: local
+  hosts: k8s
   become: true
   gather_facts: false
   tasks:
@@ -17,8 +17,15 @@
         - git
         - vim
         - net-tools
+        - wget
+        - curl
 
     - name: Rename the systems
       shell:
          hostnamectl set-hostname k8smaster
+
+    - name: Install Docker app
+      shell:
+        curl -fsSL https://get.docker.com | bash
+      ignore_errors: true
 ...
